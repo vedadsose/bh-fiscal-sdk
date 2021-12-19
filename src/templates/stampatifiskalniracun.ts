@@ -1,0 +1,43 @@
+export default `<?xml version="1.0" encoding="utf-8"?>
+<RacunZahtjev
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<BrojZahtjeva>{{requestId}}</BrojZahtjeva>
+	<VrstaZahtjeva>0</VrstaZahtjeva>
+	<NoviObjekat>
+		<BrojRacuna>{{billId}}</BrojRacuna>
+		<Datum>{{date}}</Datum>
+        {{#buyer}}
+		<Kupac>
+			<IDbroj>{{id}}</IDbroj>
+			<Naziv>{{name}}</Naziv>
+			<Adresa>{{address}}</Adresa>
+			<PostanskiBroj>{{zipCode}}</PostanskiBroj>
+			<Grad>{{city}}</Grad>
+		</Kupac>
+        {{/buyer}}
+		<StavkeRacuna>
+            {{#articles}}
+			<RacunStavka>
+				<artikal>
+					<Sifra>{{id}}</Sifra>
+					<Naziv>{{name}}</Naziv>
+					<JM>{{unit}}</JM>
+					<Cijena>{{price}}</Cijena>
+					<Stopa>{{rate}}</Stopa>
+				</artikal>
+				<Kolicina>{{quantity}}</Kolicina>
+				<Rabat>{{discount}}</Rabat>
+			</RacunStavka>
+            {{/articles}}
+		</StavkeRacuna>
+		<VrstePlacanja>
+            {{#paymentMethods}}
+			<VrstaPlacanja>
+				<Oznaka>{{type}}</Oznaka>
+				<Iznos>{{amount}}</Iznos>
+			</VrstaPlacanja>
+			{{/paymentMethods}}
+		</VrstePlacanja>
+	</NoviObjekat>
+</RacunZahtjev>`;

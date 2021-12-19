@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KasaOdgovor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Odgovori>
+    <Odgovor>
+      <Naziv>BrojFiskalnogRacuna</Naziv>
+      <Vrijednost xsi:type="xsd:int">397090</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>DatumFiskalnogRacuna</Naziv>
+      <Vrijednost xsi:type="xsd:string">12.09.2021.</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>VrijemeFiskalnogRacuna</Naziv>
+      <Vrijednost xsi:type="xsd:string">08:30:59</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>IznosFiskalnogRacuna</Naziv>
+      <Vrijednost xsi:type="xsd:double">472277.5</Vrijednost>
+    </Odgovor>
+  </Odgovori>
+  <VrstaOdgovora>OK</VrstaOdgovora>
+  <BrojZahtjeva>233</BrojZahtjeva>
+</KasaOdgovor>

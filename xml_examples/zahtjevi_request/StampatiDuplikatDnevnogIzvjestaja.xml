@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Zahtjev xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BrojZahtjeva>466463</BrojZahtjeva>
+  <VrstaZahtjeva>8</VrstaZahtjeva>
+  <Parametri>
+    <Parametar>
+      <Naziv>BrojDnevnogIzvjestaja</Naziv>
+      <Vrijednost>25</Vrijednost>
+    </Parametar>
+  </Parametri>
+</Zahtjev>

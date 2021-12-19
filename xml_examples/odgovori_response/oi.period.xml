@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KasaOdgovor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Odgovori>
+    <Odgovor>
+      <Naziv>FactoryId</Naziv>
+      <Vrijednost xsi:type="xsd:string">12335878</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>FMSignature</Naziv>
+      <Vrijednost xsi:type="xsd:string">AL</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>IBFM</Naziv>
+      <Vrijednost xsi:type="xsd:string">000020</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>JIB</Naziv>
+      <Vrijednost xsi:type="xsd:string">4209694660002</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>PIB</Naziv>
+      <Vrijednost xsi:type="xsd:string">209694660003</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>InitTime</Naziv>
+      <Vrijednost xsi:type="xsd:string">09:03</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>InitDate</Naziv>
+      <Vrijednost xsi:type="xsd:string">01.01.2017</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>NumberOfDailyReports</Naziv>
+      <Vrijednost xsi:type="xsd:unsignedInt">1973</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>NumberOfTaxChanges</Naziv>
+      <Vrijednost xsi:type="xsd:unsignedInt">23</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>NumberOfResets</Naziv>
+      <Vrijednost xsi:type="xsd:unsignedInt">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>NumberOfServices</Naziv>
+      <Vrijednost xsi:type="xsd:unsignedInt">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Linija1</Naziv>
+      <Vrijednost xsi:type="xsd:string">Tring d.o.o.o</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Linija2</Naziv>
+      <Vrijednost xsi:type="xsd:string">Razvoj</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Linija3</Naziv>
+      <Vrijednost xsi:type="xsd:string">Lejlekuša</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Linija4</Naziv>
+      <Vrijednost xsi:type="xsd:string">75320 Gračanica</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Linija5</Naziv>
+      <Vrijednost xsi:type="xsd:string">035 700 200</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Gotovina</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Cek</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Kartica</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>Virman</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>TA</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>TE</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">27235229.64</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>TJ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>TK</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0.46</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>TM</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ZA</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ZE</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">5271286.02</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ZJ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ZK</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ZM</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>AT</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>ET</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">280187.2</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>JT</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>KT</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>MT</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>AZ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>EZ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">54229.36</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>JZ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>KZ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>MZ</Naziv>
+      <Vrijednost xsi:type="xsd:decimal">0</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>lastBF</Naziv>
+      <Vrijednost xsi:type="xsd:int">194350</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>lastRF</Naziv>
+      <Vrijednost xsi:type="xsd:int">1985</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>fw_version</Naziv>
+      <Vrijednost xsi:type="xsd:string">v0.1.8+0977f88.dirty</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>last_inspection_date</Naziv>
+      <Vrijednost xsi:type="xsd:dateTime">2017-01-01T09:03:00</Vrijednost>
+    </Odgovor>
+    <Odgovor>
+      <Naziv>last_transfer_date</Naziv>
+      <Vrijednost xsi:type="xsd:dateTime">2021-09-14T09:41:00</Vrijednost>
+    </Odgovor>
+  </Odgovori>
+  <VrstaOdgovora>OK</VrstaOdgovora>
+</KasaOdgovor>

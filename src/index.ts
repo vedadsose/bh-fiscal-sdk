@@ -1,11 +1,14 @@
 import axios, { AxiosInstance } from "axios";
 import * as Mustache from "mustache";
+import { format } from "date-fns";
 import {
   PrintPeriodicalReportParams,
   PrintReceiptParams,
   SDKConfig,
 } from "./types";
 import xmlTemplates from "./templates";
+
+const CLASSIC_DATE_FORMAT = `yyyy-MM-dd'T'hh:mm:ss`;
 
 class FiscalSDK {
   axios: AxiosInstance;
@@ -37,14 +40,21 @@ class FiscalSDK {
   async printReceipt(params: PrintReceiptParams) {
     await this.request(
       "stampatifiskalniracun",
-      this.parseTemplate("stampatifiskalniracun", params)
+      this.parseTemplate("stampatifiskalniracun", {
+        ...params,
+        date: format(params.date, CLASSIC_DATE_FORMAT),
+      })
     );
   }
 
   async printPeriodicalReport(params: PrintPeriodicalReportParams) {
     await this.request(
       "stampatiperiodicniizvjestaj",
-      this.parseTemplate("stampatiperiodicniizvjestaj", params)
+      this.parseTemplate("stampatiperiodicniizvjestaj", {
+        ...params,
+        startDate: format(params.startDate, CLASSIC_DATE_FORMAT),
+        endDate: format(params.endDate, CLASSIC_DATE_FORMAT),
+      })
     );
   }
 

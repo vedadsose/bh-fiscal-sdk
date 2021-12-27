@@ -33,7 +33,7 @@ interface PaymentMethod {
 }
 
 export interface PrintReceiptParams {
-  date: string;
+  date: Date;
   billId: string;
   buyer?: ReceiptBuyer;
   articles: Article[];
@@ -41,6 +41,6 @@ export interface PrintReceiptParams {
 }
 
 export interface PrintPeriodicalReportParams {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 }

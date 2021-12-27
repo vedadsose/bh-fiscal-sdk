@@ -1,9 +1,12 @@
 {
   "name": "bh-fiscal-sdk",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
@@ -28,6 +31,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "date-fns": "^2.27.0",
     "mustache": "^4.2.0"
   }
 }

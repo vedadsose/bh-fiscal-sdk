@@ -44,3 +44,10 @@ export interface PrintPeriodicalReportParams {
   startDate: Date;
   endDate: Date;
 }
+
+export interface ReceiptResult {
+  id: number;
+  date: string;
+  time: string;
+  amount: number;
+}

@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Print receipt when the service is working should prepare and send the correct XML 1`] = `
+"<?xml version="1.0" encoding="utf-8"?>
+<RacunZahtjev
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<BrojZahtjeva></BrojZahtjeva>
+	<VrstaZahtjeva>0</VrstaZahtjeva>
+	<NoviObjekat>
+		<BrojRacuna>1</BrojRacuna>
+		<Datum>2023-01-01T08:30:59</Datum>
+		<StavkeRacuna>
+			<RacunStavka>
+				<artikal>
+					<Sifra>1</Sifra>
+					<Naziv>Zvake</Naziv>
+					<JM></JM>
+					<Cijena>10</Cijena>
+					<Stopa>E</Stopa>
+				</artikal>
+				<Kolicina>1</Kolicina>
+				<Rabat>0</Rabat>
+			</RacunStavka>
+		</StavkeRacuna>
+		<VrstePlacanja>
+			<VrstaPlacanja>
+				<Oznaka>Gotovina</Oznaka>
+				<Iznos>10</Iznos>
+			</VrstaPlacanja>
+		</VrstePlacanja>
+	</NoviObjekat>
+</RacunZahtjev>"
+`;

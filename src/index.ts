@@ -4,9 +4,11 @@ import { format } from "date-fns";
 import {
   PrintPeriodicalReportParams,
   PrintReceiptParams,
+  ReceiptResult,
   SDKConfig,
 } from "./types";
 import xmlTemplates from "./templates";
+import { XMLParser } from "fast-xml-parser";
 
 const CLASSIC_DATE_FORMAT = `yyyy-MM-dd'T'hh:mm:ss`;
 
@@ -37,14 +39,42 @@ class FiscalSDK {
     return Mustache.render(xmlTemplates[fileName], params);
   }
 
-  async printReceipt(params: PrintReceiptParams) {
-    await this.request(
+  async printReceipt(params: PrintReceiptParams): Promise<ReceiptResult> {
+    const response = await this.request(
       "stampatifiskalniracun",
       this.parseTemplate("stampatifiskalniracun", {
         ...params,
         date: format(params.date, CLASSIC_DATE_FORMAT),
       })
     );
+
+    const parser = new XMLParser();
+    const parsed = parser.parse(response.data);
+
+    console.log(parsed);
+    const responses: Record<string, string> = (
+      [].concat(parsed.KasaOdgovor.Odgovori.Odgovor) as {
+        Naziv: string;
+        Vrijednost: string;
+      }[]
+    ).reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.Naziv]: item.Vrijednost,
+      }),
+      {}
+    );
+
+    if (parsed.KasaOdgovor.VrstaOdgovora === "OK") {
+      return {
+        id: +responses.BrojFiskalnogRacuna,
+        date: responses.DatumFiskalnogRacuna,
+        time: responses.VrijemeFiskalnogRacuna,
+        amount: +responses.IznosFiskalnogRacuna,
+      };
+    } else {
+      throw new Error(`Error: ${responses["Štampanje fiskalnog računa"]}`);
+    }
   }
 
   async printPeriodicalReport(params: PrintPeriodicalReportParams) {

@@ -41,7 +41,12 @@ const response = await sdk.printReceipt({
       price: 0.50,
       quantity: 2,
       discount: 0,
-      rate: "E" // opca stopa PDV 17%, K za oslobodjeno od PDV
+      /*
+        E - opšta stopa (17%)
+        K - stopa za artikle oslobođenje plaćanja PDV (0%)
+        A - za korisnike koji nisu u sistemu PDV (0%)
+      */
+      rate: "E"
     }
   ],
 });

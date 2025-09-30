@@ -30,8 +30,15 @@ const response = await sdk.printReceipt({
   billId: "1233",
   paymentMethods: [
     {
+      /*
+        Podržani tipovi:
+          - Virman
+          - Gotovina
+          - Kartica
+          - Cek
+      */
       type: "Virman",
-      amount: invoice.total,
+      amount: 0.50,
     },
   ],
   articles: [

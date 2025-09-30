@@ -25,18 +25,30 @@ const sdk = new FiscalSDK({
 Metoda za štampanje fiskalnog računa. Vraća Promise koji sadrži informacije o odštampanom računu.
 
 ```typescript
-const result = await sdk.printReceipt({
+const response = await sdk.printReceipt({
   date: new Date(),
-  items: [
+  billId: "1233",
+  paymentMethods: [
     {
-      name: "Coca Cola",
-      quantity: 2,
-      price: 2.5,
-      vatRate: 17,
+      type: "Virman",
+      amount: invoice.total,
     },
   ],
-  paymentType: "GOTOVINA",
-  operator: "Operater 1",
+  articles: [
+    {
+      id: "1",
+      name: "Cunga lunga",
+      price: 0.50,
+      quantity: 2,
+      discount: 0,
+      /*
+        E - opšta stopa (17%)
+        K - stopa za artikle oslobođenje plaćanja PDV (0%)
+        A - za korisnike koji nisu u sistemu PDV (0%)
+      */
+      rate: "E"
+    }
+  ],
 });
 
 // Rezultat:

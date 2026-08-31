@@ -4,16 +4,36 @@
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": {
+    "bh-fiscal-emulator": "lib/emulator/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./emulator": {
+      "types": "./lib/emulator/index.d.ts",
+      "default": "./lib/emulator/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "emulator": [
+        "lib/emulator/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "lib/**/*"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.emulator.json",
     "prepare": "npm run build",
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "test": "jest .",
-    "emulator": "ts-node emulator/cli.ts"
+    "emulator": "node lib/emulator/cli.js"
   },
   "repository": {
     "type": "git",

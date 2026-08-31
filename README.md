@@ -96,13 +96,19 @@ await sdk.printOverview();
 
 ## Emulator fiskalnog printera
 
-`emulator/` je HTTP simulator TRING kase za lokalni razvoj — nije dio published paketa i ne zamjenjuje fizički uređaj.
+HTTP simulator TRING kase za lokalni razvoj — ne zamjenjuje fizički uređaj. Dolazi uz npm paket kao CLI.
 
-Pokretanje iz ovog repoa:
+Nakon `npm install bh-fiscal-sdk`:
 
 ```bash
-npm run emulator
-# ili: npx ts-node emulator/cli.ts --port 8085
+npx bh-fiscal-emulator
+# port: --port 9090   ili   PORT=9090
+```
+
+Bez instalacije, jednokratno:
+
+```bash
+npx -p bh-fiscal-sdk bh-fiscal-emulator
 ```
 
 Default je `http://127.0.0.1:8085` (isti host kao u primjeru iznad). SDK se samo uperuje na emulator:
@@ -112,6 +118,15 @@ const sdk = new FiscalSDK({ host: "http://127.0.0.1:8085" });
 await sdk.printReceipt({ /* ... */ });
 ```
 
+Programski (testovi, skripte):
+
+```typescript
+import { startEmulator } from "bh-fiscal-sdk/emulator";
+
+const emu = await startEmulator({ port: 0 });
+const sdk = new FiscalSDK({ host: emu.url });
+```
+
 Što emulator radi:
 
 - Govori isti XML-over-HTTP protokol kao kasa (`POST /stampatifiskalniracun`, `/oi`, …)
@@ -119,8 +134,6 @@ await sdk.printReceipt({ /* ... */ });
 - Vraća fiskalni broj **ASC, od 1** (`1, 2, 3, …`); reklamacije imaju svoj brojač
 - Svaki račun / reklamaciju / Z-izvještaj ispisuje u konzolu
 - `getBasicInfo` / `getDailyReport` refleksuju odštampano; dnevni izvještaj zatvara Z period
-
-Programski (testovi, skripte): `startEmulator({ port: 0 })` iz `emulator/`.
 
 ## Obrada grešaka
 

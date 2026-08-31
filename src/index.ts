@@ -1,12 +1,15 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import * as Mustache from "mustache";
 import { format } from "date-fns";
 import {
+  FiscalError,
   FiscalSummary,
   GetDailyReportParams,
+  KasaErrorDetails,
   MoneyMovementParams,
   PrintPeriodicalReportParams,
   PrintReceiptParams,
+  RawExchange,
   ReceiptResult,
   ReclaimReceiptParams,
   ReclamationResult,
@@ -17,6 +20,55 @@ import xmlTemplates from "./templates";
 import { XMLParser } from "fast-xml-parser";
 
 const CLASSIC_DATE_FORMAT = `yyyy-MM-dd'T'hh:mm:ss`;
+
+// Pull the structured device error details out of a failed <KasaOdgovor>.
+// Firmware revisions disagree on the shape of an error <Odgovor>: some put a
+// command label in <Naziv> and the error text in <Vrijednost>, while others put
+// the human-readable reason in <Naziv> and a numeric status code in
+// <Vrijednost> (e.g. "Količina nije validna ! (0.001 - 999999.999)" / 408). A
+// purely-numeric <Vrijednost> is treated as the status code; anything else is
+// error text that belongs in the message. This covers either convention,
+// instead of looking up a fixed key one of them never returns — which is what
+// produced the old "Error: undefined".
+export function parseKasaError(parsed: any): KasaErrorDetails {
+  const odgovori = ([] as { Naziv?: unknown; Vrijednost?: unknown }[])
+    .concat(parsed?.KasaOdgovor?.Odgovori?.Odgovor ?? [])
+    .filter((o) => o != null);
+
+  let code: string | undefined;
+  const parts = odgovori
+    .map((o) => {
+      const naziv = o?.Naziv != null ? String(o.Naziv).trim() : "";
+      const vrijednost = o?.Vrijednost != null ? String(o.Vrijednost).trim() : "";
+      if (vrijednost && /^\d+$/.test(vrijednost)) {
+        if (code === undefined) code = vrijednost;
+        return naziv;
+      }
+      if (naziv && vrijednost) return `${naziv}: ${vrijednost}`;
+      return naziv || vrijednost;
+    })
+    .filter((s) => s.length > 0);
+
+  const typeRaw = parsed?.KasaOdgovor?.VrstaOdgovora;
+  const responseType =
+    typeRaw != null && String(typeRaw).trim() !== "" ? String(typeRaw).trim() : undefined;
+
+  return {
+    deviceMessage: parts.length ? parts.join("; ") : undefined,
+    code,
+    responseType,
+  };
+}
+
+// Build a human-readable message from a failed <KasaOdgovor>, re-joining the
+// status code so the message reads the same as the device reported it.
+function formatKasaError(parsed: any): string {
+  const { deviceMessage, code, responseType } = parseKasaError(parsed);
+  if (deviceMessage) return code ? `${deviceMessage}: ${code}` : deviceMessage;
+  return responseType
+    ? `fiscal device returned "${responseType}" without details`
+    : "unknown fiscal device error";
+}
 
 class FiscalSDK {
   axios: AxiosInstance;
@@ -33,8 +85,37 @@ class FiscalSDK {
     try {
       return await this.axios.post(command, data);
     } catch (error) {
-      throw new Error("Failed to communicate with printer");
+      const response = (error as AxiosError)?.response?.data;
+      throw new FiscalError("Failed to communicate with printer", {
+        request: data,
+        response: response != null ? String(response) : undefined,
+      });
     }
+  }
+
+  // Pull the raw request/response XML off an axios response. The request body
+  // is preserved on config.data after the round-trip.
+  private rawExchange(response: AxiosResponse): RawExchange {
+    const asString = (value: unknown): string =>
+      typeof value === "string" ? value : value == null ? "" : String(value);
+    return {
+      request: asString(response.config?.data),
+      response: asString(response.data),
+    };
+  }
+
+  // Build a FiscalError for a failed <KasaOdgovor>, carrying both the raw
+  // exchange and the structured device details so callers don't re-parse it.
+  private kasaError(
+    parsed: any,
+    response: AxiosResponse,
+    prefix?: string
+  ): FiscalError {
+    const base = formatKasaError(parsed);
+    return new FiscalError(prefix ? `${prefix}: ${base}` : base, {
+      ...this.rawExchange(response),
+      ...parseKasaError(parsed),
+    });
   }
 
   private parseTemplate(fileName: string, params: object = {}) {
@@ -57,7 +138,6 @@ class FiscalSDK {
     const parser = new XMLParser();
     const parsed = parser.parse(response.data);
 
-    console.log(parsed);
     const responses: Record<string, string> = (
       [].concat(parsed.KasaOdgovor.Odgovori.Odgovor) as {
         Naziv: string;
@@ -77,9 +157,10 @@ class FiscalSDK {
         date: responses.DatumFiskalnogRacuna,
         time: responses.VrijemeFiskalnogRacuna,
         amount: +responses.IznosFiskalnogRacuna,
+        raw: this.rawExchange(response),
       };
     } else {
-      throw new Error(`Error: ${responses["Štampanje fiskalnog računa"]}`);
+      throw this.kasaError(parsed, response);
     }
   }
 
@@ -117,9 +198,7 @@ class FiscalSDK {
     );
 
     if (parsed.KasaOdgovor.VrstaOdgovora !== "OK") {
-      throw new Error(
-        `Error: ${responses["Štampanje reklamiranog računa"] ?? JSON.stringify(responses)}`
-      );
+      throw this.kasaError(parsed, response);
     }
 
     // Docs put the new reclamation's id in BrojReklamiranogRacuna while
@@ -133,6 +212,7 @@ class FiscalSDK {
       date: responses.DatumFiskalnogRacuna,
       time: responses.VrijemeFiskalnogRacuna,
       amount: +responses.IznosFiskalnogRacuna,
+      raw: this.rawExchange(response),
     };
   }
 
@@ -166,7 +246,7 @@ class FiscalSDK {
       "unosnovca",
       this.parseTemplate("cashmovement", params)
     );
-    this.assertKasaOk(response.data, "UnosNovca");
+    this.assertKasaOk(response, "UnosNovca");
   }
 
   async withdrawMoney(params: MoneyMovementParams): Promise<void> {
@@ -174,25 +254,15 @@ class FiscalSDK {
       "povratnovca",
       this.parseTemplate("cashmovement", params)
     );
-    this.assertKasaOk(response.data, "PovratNovca");
+    this.assertKasaOk(response, "PovratNovca");
   }
 
-  private assertKasaOk(xml: string, commandName: string): void {
+  private assertKasaOk(response: AxiosResponse, commandName: string): void {
     const parser = new XMLParser();
-    const parsed = parser.parse(xml);
+    const parsed = parser.parse(response.data);
     if (parsed?.KasaOdgovor?.VrstaOdgovora === "OK") return;
 
-    const responses: Record<string, string> = (
-      [].concat(parsed?.KasaOdgovor?.Odgovori?.Odgovor ?? []) as {
-        Naziv: string;
-        Vrijednost: string;
-      }[]
-    ).reduce(
-      (acc, item) => ({ ...acc, [item.Naziv]: item.Vrijednost }),
-      {}
-    );
-    const detail = Object.values(responses).join("; ") || "unknown error";
-    throw new Error(`Error: ${commandName} failed: ${detail}`);
+    throw this.kasaError(parsed, response, `${commandName} failed`);
   }
 
   async writeToDisplay(params: WriteToDisplayParams = {}): Promise<void> {
@@ -210,7 +280,7 @@ class FiscalSDK {
       "oi",
       this.parseTemplate("osnovneinformacije")
     );
-    return this.parseFiscalSummary(response.data, "OsnovneInformacije");
+    return this.parseFiscalSummary(response, "OsnovneInformacije");
   }
 
   async getDailyReport(params: GetDailyReportParams): Promise<FiscalSummary> {
@@ -219,7 +289,7 @@ class FiscalSDK {
       this.parseTemplate("oididnevniizvjestaj", params)
     );
     const summary = this.parseFiscalSummary(
-      response.data,
+      response,
       "ElektronskiDnevniIzvjestaj"
     );
 
@@ -227,8 +297,9 @@ class FiscalSDK {
     // BrojDI is out of range (verified on firmware v1.0.125+7661270). Detect
     // it by checking the returned Z number against the requested one.
     if (summary.zNumber !== params.brojDI) {
-      throw new Error(
-        `Daily report ${params.brojDI} not available (printer returned Z=${summary.zNumber ?? "<empty>"})`
+      throw new FiscalError(
+        `Daily report ${params.brojDI} not available (printer returned Z=${summary.zNumber ?? "<empty>"})`,
+        this.rawExchange(response)
       );
     }
 
@@ -236,11 +307,11 @@ class FiscalSDK {
   }
 
   private parseFiscalSummary(
-    xml: string,
+    response: AxiosResponse,
     command: "OsnovneInformacije" | "ElektronskiDnevniIzvjestaj"
   ): FiscalSummary {
     const parser = new XMLParser();
-    const parsed = parser.parse(xml);
+    const parsed = parser.parse(response.data);
 
     const r: Record<string, string> = (
       [].concat(parsed.KasaOdgovor.Odgovori.Odgovor) as {
@@ -253,7 +324,7 @@ class FiscalSDK {
     );
 
     if (parsed.KasaOdgovor.VrstaOdgovora !== "OK") {
-      throw new Error(`Error: ${command} failed: ${JSON.stringify(r)}`);
+      throw this.kasaError(parsed, response, `${command} failed`);
     }
 
     const num = (...keys: string[]): number | undefined => {
@@ -338,8 +409,12 @@ class FiscalSDK {
       taxJ: num("tax_j"),
       taxK: num("tax_k"),
       taxM: num("tax_m"),
+
+      raw: this.rawExchange(response),
     };
   }
 }
 
 export default FiscalSDK;
+export { FiscalError } from "./types";
+export type { RawExchange, KasaErrorDetails, FiscalErrorInfo } from "./types";

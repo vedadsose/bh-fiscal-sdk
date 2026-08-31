@@ -4,6 +4,54 @@ export interface SDKConfig {
   timeout?: number;
 }
 
+/** The raw XML exchanged with the device for a single command. */
+export interface RawExchange {
+  /** The XML payload sent to the device. */
+  request: string;
+  /** The XML payload returned by the device (empty if there was none). */
+  response: string;
+}
+
+/** Structured device error parsed from a failed <KasaOdgovor>. */
+export interface KasaErrorDetails {
+  /** Human-readable device reason, from <Naziv> (plus non-numeric <Vrijednost>). */
+  deviceMessage?: string;
+  /** Numeric device status code, from <Vrijednost>, when present. */
+  code?: string;
+  /** <VrstaOdgovora>, e.g. "Greska". */
+  responseType?: string;
+}
+
+/** Everything that can be attached to a {@link FiscalError}. */
+export type FiscalErrorInfo = Partial<RawExchange> & KasaErrorDetails;
+
+/**
+ * Thrown when a command fails. Carries the raw request/response XML and the
+ * structured device error (message, code, response type) so callers can show a
+ * real reason and report the exact exchange that failed (e.g. to Sentry)
+ * without re-parsing the XML themselves.
+ */
+export class FiscalError extends Error {
+  readonly request?: string;
+  readonly response?: string;
+  readonly deviceMessage?: string;
+  readonly code?: string;
+  readonly responseType?: string;
+
+  constructor(message: string, info?: FiscalErrorInfo) {
+    super(message);
+    this.name = "FiscalError";
+    this.request = info?.request;
+    this.response = info?.response;
+    this.deviceMessage = info?.deviceMessage;
+    this.code = info?.code;
+    this.responseType = info?.responseType;
+    // Restore the prototype chain — required for `instanceof FiscalError` to
+    // work once this is down-compiled to the package's ES5 target.
+    Object.setPrototypeOf(this, FiscalError.prototype);
+  }
+}
+
 interface ReceiptBuyer {
   // 13-char JIB/JMBG. Mandatory whenever a buyer is present — the driver
   // drops the whole Kupac block on the receipt if this is malformed.
@@ -58,6 +106,8 @@ export interface ReceiptResult {
   date: string;
   time: string;
   amount: number;
+  /** Raw request/response XML for this command. */
+  raw?: RawExchange;
 }
 
 /**
@@ -204,4 +254,7 @@ export interface FiscalSummary {
   taxJ?: number;
   taxK?: number;
   taxM?: number;
+
+  /** Raw request/response XML for this command. */
+  raw?: RawExchange;
 }

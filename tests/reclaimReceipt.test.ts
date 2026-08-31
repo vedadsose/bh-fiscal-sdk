@@ -111,7 +111,7 @@ describe("reclaimReceipt", () => {
 
   it("returns the new reclamation document's id from BrojReklamiranogRacuna (docs shape)", async () => {
     const result = await fiscal.reclaimReceipt(baseParams);
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       id: 2,
       date: "2. 10. 2023.",
       time: "08:37:33",
@@ -128,7 +128,7 @@ describe("reclaimReceipt", () => {
       )
     );
     const result = await fiscal.reclaimReceipt(baseParams);
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       id: 3,
       date: "17. 5. 2026.",
       time: "15:27",

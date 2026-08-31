@@ -137,10 +137,11 @@ describe("fiscal emulator HTTP server", () => {
     expect(first.amount).toBe(10);
     expect(second.id).toBe(2);
     expect(second.amount).toBe(5);
-    expect(logs.some((l) => l.includes("FISCAL RECEIPT #1"))).toBe(true);
-    expect(logs.some((l) => l.includes("FISCAL RECEIPT #2"))).toBe(true);
+    expect(logs.some((l) => l.includes("FISKALNI RAČUN") && l.includes("BF: 1"))).toBe(true);
+    expect(logs.some((l) => l.includes("FISKALNI RAČUN") && l.includes("BF: 2"))).toBe(true);
     expect(logs.some((l) => l.includes("Zvake"))).toBe(true);
     expect(logs.some((l) => l.includes("Sok"))).toBe(true);
+    expect(logs.some((l) => l.includes("TESTNI REŽIM"))).toBe(true);
   });
 
   it("exposes printed totals via getBasicInfo", async () => {
@@ -161,7 +162,7 @@ describe("fiscal emulator HTTP server", () => {
       refunds: [{ type: "Gotovina", amount: 10 }],
     });
     expect(result.id).toBe(1);
-    expect(logs.some((l) => l.includes("RECLAMATION #1"))).toBe(true);
+    expect(logs.some((l) => l.includes("REKLAMIRANI RAČUN") && l.includes("RBF: 1"))).toBe(true);
   });
 
   it("closes Z on printDailyReport and serves it back via getDailyReport", async () => {
@@ -191,7 +192,7 @@ describe("fiscal emulator HTTP server", () => {
     expect(logs.some((l) => l.includes("[TILL IN]") && l.includes("Virman"))).toBe(
       true
     );
-    expect(logs.some((l) => l.includes("X-REPORT"))).toBe(true);
+    expect(logs.some((l) => l.includes("PRESJEK STANJA"))).toBe(true);
     expect(logs.some((l) => l.includes("[PERIODIC REPORT]"))).toBe(true);
   });
 

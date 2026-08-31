@@ -179,7 +179,7 @@ async function handle(
         send(res, 200, kasaError(result.naziv, result.vrijednost, requestId));
         return;
       }
-      log(formatReceipt(result.receipt));
+      log(formatReceipt(result.receipt, { ibfm: device.ibfm }));
       send(
         res,
         200,
@@ -215,7 +215,7 @@ async function handle(
         send(res, 200, kasaError(result.naziv, result.vrijednost, requestId));
         return;
       }
-      log(formatReclamation(result.reclamation));
+      log(formatReclamation(result.reclamation, { ibfm: device.ibfm }));
       send(
         res,
         200,
@@ -255,13 +255,13 @@ async function handle(
 
     case "stampatidnevniizvjestaj": {
       const closed = device.closeDailyReport();
-      log(formatPeriod(`Z-REPORT #${closed.zNumber}`, closed));
+      log(formatPeriod("DNEVNI IZVJEŠTAJ", closed, { ibfm: device.ibfm }));
       send(res, 200, kasaOk([], requestId));
       return;
     }
 
     case "stampatipresjekstanja": {
-      log(formatPeriod("X-REPORT (overview)", device.currentPeriod));
+      log(formatPeriod("PRESJEK STANJA", device.currentPeriod, { ibfm: device.ibfm }));
       send(res, 200, kasaOk([], requestId));
       return;
     }

@@ -94,6 +94,34 @@ Metoda za štampanje trenutnog presjeka stanja. Ne zahtijeva parametre.
 await sdk.printOverview();
 ```
 
+## Emulator fiskalnog printera
+
+`emulator/` je HTTP simulator TRING kase za lokalni razvoj — nije dio published paketa i ne zamjenjuje fizički uređaj.
+
+Pokretanje iz ovog repoa:
+
+```bash
+npm run emulator
+# ili: npx ts-node emulator/cli.ts --port 8085
+```
+
+Default je `http://127.0.0.1:8085` (isti host kao u primjeru iznad). SDK se samo uperuje na emulator:
+
+```typescript
+const sdk = new FiscalSDK({ host: "http://127.0.0.1:8085" });
+await sdk.printReceipt({ /* ... */ });
+```
+
+Što emulator radi:
+
+- Govori isti XML-over-HTTP protokol kao kasa (`POST /stampatifiskalniracun`, `/oi`, …)
+- Drži račune i reklamacije **u memoriji** (gube se na restartu)
+- Vraća fiskalni broj **ASC, od 1** (`1, 2, 3, …`); reklamacije imaju svoj brojač
+- Svaki račun / reklamaciju / Z-izvještaj ispisuje u konzolu
+- `getBasicInfo` / `getDailyReport` refleksuju odštampano; dnevni izvještaj zatvara Z period
+
+Programski (testovi, skripte): `startEmulator({ port: 0 })` iz `emulator/`.
+
 ## Obrada grešaka
 
 Sve metode vraćaju Promise i mogu baciti grešku u slučaju problema sa komunikacijom ili drugim greškama. Preporučuje se korištenje try-catch bloka:

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`thermal receipt slip prints a Tring-style fiskalni račun 1`] = `
+"
+EMULATOR d.o.o.
+Testna 1, 71000 Sarajevo
+JIB: 0000000000000
+PIB: 000000000000
+IBFM: EMU00001
+--------------------------------
+FISKALNI RAČUN
+BF: 1
+31.08.2026. 11:32
+--------------------------------
+Zvake
+1,000x  10,00             10,00E
+--------------------------------
+VA 17,00%
+OSN. E                      8,55
+PDV E                       1,45
+PDV                         1,45
+--------------------------------
+TOTAL                      10,00
+UPLAĆENO
+Gotovina                   10,00
+Ukupno                     10,00
+POVRAT                      0,00
+Tring d.o.o.
+JIB: 1234567890123
+Lejlekuša bb
+75320 Gračanica
+--------------------------------
+        █▀▀▀▀▀█ █▀▀▀▀▀█
+        █ ███ █▄█ ███ █
+        █ ▀▀▀ ███ ▀▀▀ █
+        ▀▀█▀▀██ █▀▀█▀▀█
+        █▀▀▀▀▀█▄▄▀     
+        █ ███ █ ██▄▀█ ▀
+        █ ▀▀▀ ██████▀▀█
+        ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀
+5ed0e49dfb9e3cc103e2c17247667ad9
+           ┌───────┐
+           │  F M  │
+           │ FBIH  │
+           └───────┘
+Kasir: Emulator
+KASA 01
+"
+`;

@@ -1,42 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`thermal receipt slip prints a 58mm-style fiskalni račun 1`] = `
+exports[`thermal receipt slip prints a Tring-style fiskalni račun 1`] = `
 "
-================================
-        EMULATOR d.o.o.
-      Demo prodajno mjesto
-            Testna 1
-         71000 Sarajevo
-       JIB: 0000000000000
-       PIB: 000000000000
-         IBFM: EMU00001
-================================
-         FISKALNI RAČUN
-================================
+EMULATOR d.o.o.
+Testna 1, 71000 Sarajevo
+JIB: 0000000000000
+PIB: 000000000000
+IBFM: EMU00001
+--------------------------------
+FISKALNI RAČUN
+BF: 1
+31.08.2026. 11:32
+--------------------------------
 Zvake
-1.000 x 10.00  E           10.00
+1,000x  10,00             10,00E
 --------------------------------
-UKUPNO                  10.00 KM
-Gotovina                   10.00
+VA 17,00%
+OSN. E                      8,55
+PDV E                       1,45
+PDV                         1,45
 --------------------------------
-Stopa  Osnovica              PDV
-E 17%  8.55                 1.45
---------------------------------
-             Kupac
+TOTAL                      10,00
+UPLAĆENO
+Gotovina                   10,00
+Ukupno                     10,00
+POVRAT                      0,00
 Tring d.o.o.
 JIB: 1234567890123
 Lejlekuša bb
 75320 Gračanica
 --------------------------------
-BF: 1
-Interni broj: 100
-31.08.2026.  11:32:01
---------------------------------
-MD5: 2483f399394f84de643e54669f2
-       [ fiskalni logo ]
-================================
-        HVALA NA POSJETI
-       ** TESTNI REŽIM **
-================================
+        █▀▀▀▀▀█ █▀▀▀▀▀█
+        █ ███ █▄█ ███ █
+        █ ▀▀▀ ███ ▀▀▀ █
+        ▀▀█▀▀██ █▀▀█▀▀█
+        █▀▀▀▀▀█▄▄▀     
+        █ ███ █ ██▄▀█ ▀
+        █ ▀▀▀ ██████▀▀█
+        ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀
+5ed0e49dfb9e3cc103e2c17247667ad9
+           ┌───────┐
+           │  F M  │
+           │ FBIH  │
+           └───────┘
+Kasir: Emulator
+KASA 01
 "
 `;

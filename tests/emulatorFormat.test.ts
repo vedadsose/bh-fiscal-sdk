@@ -33,21 +33,59 @@ const receipt: StoredReceipt = {
 };
 
 describe("thermal receipt slip", () => {
-  it("prints a 58mm-style fiskalni račun", () => {
+  it("prints a Tring-style fiskalni račun", () => {
     const slip = formatReceipt(receipt, identity);
     expect(slip).toMatchSnapshot();
     expect(slip).toContain("FISKALNI RAČUN");
     expect(slip).toContain("IBFM: EMU00001");
     expect(slip).toContain("Zvake");
-    expect(slip).toContain("UKUPNO");
+    expect(slip).toContain("TOTAL");
+    expect(slip).toContain("UPLAĆENO");
     expect(slip).toContain("Gotovina");
-    expect(slip).toContain("E 17%");
-    expect(slip).toContain("Kupac");
+    expect(slip).toContain("POVRAT");
+    expect(slip).toContain("VA 17,00%");
+    expect(slip).toContain("OSN. E");
+    expect(slip).toContain("PDV E");
     expect(slip).toContain("Tring d.o.o.");
     expect(slip).toContain("BF: 1");
-    expect(slip).toContain("TESTNI REŽIM");
-    expect(slip).toContain("fiskalni logo");
-    expect(slip).toContain("MD5:");
+    expect(slip).toContain("KASA 01");
+    expect(slip).toContain("Kasir:");
+    expect(slip).toContain("FBIH");
+    expect(slip).toMatch(/[0-9a-f]{32}/);
+    expect(slip).toContain("10,00E");
+    expect(slip).toContain("1,000x");
+  });
+
+  it("matches the real slip item/tax/pay block (espresso-style)", () => {
+    const coffee: StoredReceipt = {
+      id: 26599,
+      date: new Date(2026, 7, 31, 10, 41, 0),
+      amount: 6,
+      articles: [
+        {
+          id: "1",
+          name: "Espresso kafa",
+          unit: "KOM",
+          price: 3,
+          rate: "A",
+          quantity: 2,
+          discount: 0,
+          gross: 6,
+          net: 6,
+          vat: 0,
+        },
+      ],
+      payments: [{ type: "Gotovina", amount: 6 }],
+      reclaimed: false,
+    };
+    const slip = formatReceipt(coffee, identity);
+    expect(slip).toContain("Espresso kafa/KOM");
+    expect(slip).toContain("2,000x  3,00");
+    expect(slip).toContain("6,00A");
+    expect(slip).toContain("VA 0,00%");
+    expect(slip).toContain("OSN. A");
+    expect(slip).toContain("BF: 26599");
+    expect(slip).toContain("31.08.2026. 10:41");
   });
 
   it("prints a reklamirani račun with the original RF number", () => {
@@ -63,6 +101,6 @@ describe("thermal receipt slip", () => {
     const slip = formatReclamation(rec, identity);
     expect(slip).toContain("REKLAMIRANI RAČUN");
     expect(slip).toContain("RF: 19");
-    expect(slip).toContain("RBF: 1");
+    expect(slip).toContain("BF: 1");
   });
 });

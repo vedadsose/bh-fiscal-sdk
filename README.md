@@ -124,7 +124,7 @@ const sdk = new FiscalSDK({ host: emu.url });
 - Govori isti XML-over-HTTP protokol kao kasa (`POST /stampatifiskalniracun`, `/oi`, …)
 - Drži račune i reklamacije **u memoriji** (gube se na restartu)
 - Vraća fiskalni broj **ASC, od 1** (`1, 2, 3, …`); reklamacije imaju svoj brojač
-- Svaki `printReceipt` ispisuje **termalni fiskalni račun** u konzolu (58mm / 32 znaka: zaglavlje, stavke, porez, IBFM, TESTNI REŽIM)
+- Svaki `printReceipt` ispisuje **termalni fiskalni račun** u konzolu po Tring rasporedu (JIB/PIB/IBFM, BF, stavke `kolx cijena iznosA`, OSN/PDV, UPLAĆENO/POVRAT, QR, hash, KASA)
 - `getBasicInfo` / `getDailyReport` refleksuju odštampano; dnevni izvještaj zatvara Z period
 
 ## Obrada grešaka

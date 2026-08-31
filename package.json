@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
+    "bh-fiscal-sdk": "lib/emulator/cli.js",
     "bh-fiscal-emulator": "lib/emulator/cli.js"
   },
   "exports": {

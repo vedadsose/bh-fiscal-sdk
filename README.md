@@ -96,14 +96,12 @@ await sdk.printOverview();
 
 ## Emulator fiskalnog printera
 
-HTTP simulator TRING kase za lokalni razvoj — ne zamjenjuje fizički uređaj. Nije poseban npm paket; CLI dolazi uz `bh-fiscal-sdk`.
+HTTP simulator TRING kase za lokalni razvoj — ne zamjenjuje fizički uređaj. Nije poseban npm paket; CLI je isti `bh-fiscal-sdk` paket:
 
 ```bash
-npx bh-fiscal-sdk
+npx bh-fiscal-sdk emulator
 # port: --port 9090   ili   PORT=9090
 ```
-
-Ako je SDK već instaliran u projektu, isto radi i `npx bh-fiscal-emulator` (oba imena su binovi ovog paketa).
 
 Default je `http://127.0.0.1:8085` (isti host kao u primjeru iznad). SDK se samo uperuje na emulator:
 

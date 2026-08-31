@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "bh-fiscal-sdk": "lib/emulator/cli.js",
-    "bh-fiscal-emulator": "lib/emulator/cli.js"
+    "bh-fiscal-sdk": "lib/emulator/cli.js"
   },
   "exports": {
     ".": {
@@ -34,7 +33,7 @@
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "test": "jest .",
-    "emulator": "node lib/emulator/cli.js"
+    "emulator": "node lib/emulator/cli.js emulator"
   },
   "repository": {
     "type": "git",

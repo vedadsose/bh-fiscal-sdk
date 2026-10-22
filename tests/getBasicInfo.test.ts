@@ -123,6 +123,28 @@ describe("getBasicInfo", () => {
     });
   });
 
+  describe("with a driver that reports the IBFM as digits only", () => {
+    const server = setupServer(
+      rest.post<string>("http://localhost:4000/oi", async (_req, res, ctx) =>
+        res(
+          ctx.set("Content-Type", "text/xml"),
+          ctx.body(docsResponseXml.replace(">AL901930<", ">066191<"))
+        )
+      )
+    );
+
+    beforeAll(() => server.listen());
+    afterAll(() => server.close());
+    afterEach(() => server.resetHandlers());
+
+    it("keeps it as text with the leading zero, and numbers still as numbers", async () => {
+      const r = await fiscal.getBasicInfo();
+      expect(r.ibfm).toBe("066191");
+      expect(r.zNumber).toBe(3);
+      expect(r.cash).toBe(136.35);
+    });
+  });
+
   describe("with older-firmware (mixed-case) response from xml_examples", () => {
     const server = setupServer(
       rest.post<string>("http://localhost:4000/oi", async (_req, res, ctx) =>

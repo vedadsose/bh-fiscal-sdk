@@ -310,7 +310,10 @@ class FiscalSDK {
     response: AxiosResponse,
     command: "OsnovneInformacije" | "ElektronskiDnevniIzvjestaj"
   ): FiscalSummary {
-    const parser = new XMLParser();
+    // Values stay text: the parser would turn a digits-only IBFM ("066191",
+    // reported by some drivers) into the number 66191 and drop the leading
+    // zero. num() and date() convert the fields they read themselves.
+    const parser = new XMLParser({ parseTagValue: false });
     const parsed = parser.parse(response.data);
 
     const r: Record<string, string> = (

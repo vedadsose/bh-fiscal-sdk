@@ -19,7 +19,9 @@ import {
 import xmlTemplates from "./templates";
 import { XMLParser } from "fast-xml-parser";
 
-const CLASSIC_DATE_FORMAT = `yyyy-MM-dd'T'hh:mm:ss`;
+// 24-hour clock: the till reads the hour and minute of a report period, so
+// `hh` (12-hour) sent 23:59 as 11:59 and midnight as 12:00.
+const CLASSIC_DATE_FORMAT = `yyyy-MM-dd'T'HH:mm:ss`;
 
 // Pull the structured device error details out of a failed <KasaOdgovor>.
 // Firmware revisions disagree on the shape of an error <Odgovor>: some put a
@@ -216,8 +218,10 @@ class FiscalSDK {
     };
   }
 
+  // Dates are formatted in the process's local time zone: pass the wall-clock
+  // bounds the till should use.
   async printPeriodicalReport(params: PrintPeriodicalReportParams) {
-    await this.request(
+    const response = await this.request(
       "stampatiperiodicniizvjestaj",
       this.parseTemplate("stampatiperiodicniizvjestaj", {
         ...params,
@@ -225,6 +229,7 @@ class FiscalSDK {
         endDate: format(params.endDate, CLASSIC_DATE_FORMAT),
       })
     );
+    this.assertKasaOk(response, "PeriodicniIzvjestaj");
   }
 
   async printDailyReport() {
@@ -235,10 +240,11 @@ class FiscalSDK {
   }
 
   async printOverview() {
-    await this.request(
+    const response = await this.request(
       "stampatipresjekstanja",
       this.parseTemplate("stampatipresjekstanja")
     );
+    this.assertKasaOk(response, "PresjekStanja");
   }
 
   async depositMoney(params: MoneyMovementParams): Promise<void> {
